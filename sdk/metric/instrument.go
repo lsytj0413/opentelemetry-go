@@ -223,6 +223,10 @@ func newFloat64Observable(scope instrumentation.Scope, kind InstrumentKind, name
 	}
 }
 
+func (f float64Observable) Observe(val float64, attrs ...attribute.KeyValue) {
+	f.observable.Observe(val, attrs...)
+}
+
 type int64Observable struct {
 	instrument.Int64Observable
 	*observable[int64]
@@ -236,6 +240,10 @@ func newInt64Observable(scope instrumentation.Scope, kind InstrumentKind, name, 
 	return int64Observable{
 		observable: newObservable[int64](scope, kind, name, desc, u, agg),
 	}
+}
+
+func (f int64Observable) Observe(val int64, attrs ...attribute.KeyValue) {
+	f.observable.Observe(val, attrs...)
 }
 
 type observable[N int64 | float64] struct {
@@ -263,6 +271,11 @@ func (o *observable[N]) observe(val N, attrs []attribute.KeyValue) {
 	for _, agg := range o.aggregators {
 		agg.Aggregate(val, attribute.NewSet(attrs...))
 	}
+}
+
+// Observe records the val for the set of attrs.
+func (o *observable[N]) Observe(val N, attrs ...attribute.KeyValue) {
+	o.observe(val, attrs)
 }
 
 var errEmptyAgg = errors.New("no aggregators for observable instrument")
