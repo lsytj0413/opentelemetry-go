@@ -29,6 +29,9 @@ type Float64Observable interface {
 	Asynchronous
 
 	float64Observable()
+
+	// Observe records the val for the set of attrs.
+	Observe(val float64, attrs ...attribute.KeyValue)
 }
 
 // Float64ObservableCounter is an instrument used to asynchronously record

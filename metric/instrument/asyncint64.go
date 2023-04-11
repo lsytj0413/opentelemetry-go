@@ -29,6 +29,9 @@ type Int64Observable interface {
 	Asynchronous
 
 	int64Observable()
+
+	// Observe records the val for the set of attrs.
+	Observe(val int64, attrs ...attribute.KeyValue)
 }
 
 // Int64ObservableCounter is an instrument used to asynchronously record
